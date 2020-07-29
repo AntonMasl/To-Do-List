@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 window.addEventListener('DOMContentLoaded', function () {
     let list = document.querySelector('.content__list');
     let todo;
@@ -36,4 +36,4 @@ window.addEventListener('DOMContentLoaded', function () {
     if (localStorage.getItem('todo')) {
         list.innerHTML = localStorage.getItem('todo');
     }
-}
+});
