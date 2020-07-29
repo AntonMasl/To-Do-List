@@ -1,42 +1,39 @@
-$(function () {
-    let addWork = function () {
-        let valueInput = $('.content__input').val();
+'use strict'
+window.addEventListener('DOMContentLoaded', function () {
+    let list = document.querySelector('.content__list');
+    let todo;
+    function toLocal() {
+        todo = list.innerHTML;
+        localStorage.setItem('todo', todo);
+    }
+    function addWork() {
+        let valueInput = document.querySelector('.content__input').value;
         let element = '<li class="content__list-item"></li>';
         let elemBtn = '<button class="content__close-btn">Сделал</button>';
         if (valueInput == '') {
             alert('Вы ничего не ввели повторите ввод');
         }
         else {
-            $('.content__list').append(element);
-            $('.content__list-item').last().text(valueInput).append(elemBtn);
-
+            document.querySelector('.content__list').insertAdjacentHTML('beforeend', element);
+            document.querySelector('.content__list-item:last-child').textContent = valueInput;
+            document.querySelector('.content__list-item:last-child').insertAdjacentHTML('beforeend', elemBtn);
         }
-        $('.content__input').val('');
-    };
-    let delWork = function () {
-        $(this).css({ 'background-color': 'green' });
-        $(this).parent().css({
-            'text-decoration': 'line-through',
-            'border-style': 'solid',
-            'border-color': 'green',
-            'border-width': '2px',
-            'color': 'green'
-        });
-        setTimeout(() => {
-            $(this).parent().remove();
-        }, 1000);
-    };
-    $(".content__btn").on('click', addWork);
-    $('.content__list').on('click', '.content__close-btn', delWork);
-
-    $('.content__input').on('keyup', function (event) {
-        if (event.which == 13){
-            $('.content__btn').addClass("content__btn_active").delay(50).queue(function(next){
-                $(this).removeClass("content__btn_active");
-                next();
-            });
-            
-            $('.content__btn').trigger('click');
+        document.querySelector('.content__input').value = '';
+        toLocal();
+    }
+    function delWork(event) {
+        if (event.target.tagName == 'BUTTON') {
+            event.target.style.backgroundColor = 'green'
+            event.target.parentNode.classList.add('decorationDelWork');
+            setTimeout(() => {
+                event.target.parentNode.remove();
+                toLocal();
+            }, 1000);
         }
-    });
-});
+    };
+    document.querySelector('.content__btn').addEventListener('click', addWork);
+    document.querySelector('.content__list').addEventListener('click', delWork);
+    if (localStorage.getItem('todo')) {
+        list.innerHTML = localStorage.getItem('todo');
+    }
+}
